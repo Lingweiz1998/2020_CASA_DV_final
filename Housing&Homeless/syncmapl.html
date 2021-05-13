@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>HousingHomelessmaps</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .map-overlay {
+            font: 20px inherit;
+            background-color: rgba(20, 19, 19, 0.8);
+            position: absolute;
+            width: 30%;
+            height: 20%;
+            border-radius: 3px;
+            top: 1%;
+            left: 1%;
+            padding: 0px;
+        }
+
+        .map-overlay .map-overlay-inner {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .map-overlay table {
+            border: none;
+            width: 100%;
+            display: inline-block;
+            padding: 0px;
+        }
+
+        .map-overlay .bottonlist {
+            display: block;
+            /* Make the buttons appear below each other */
+            padding: 10px 0px;
+        }
+
+
+        .map-overlay .button:hover {
+            background-color: rgba(255, 255, 255, 0.3)
+        }
+
+        .map-overlay .radiobutton {
+            font: 16px inherit;
+        }
+
+        .map-overlay .viewButton {
+            background-color: Transparent;
+            border: 1px solid #FFFFFF;
+            width: 120px;
+            color: white;
+            border-radius: 3px;
+            padding: 5px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline;
+            font: 14px inherit;
+            cursor: pointer;
+            /* Pointer/hand icon */
+
+        }
+
+        .map-overlay .viewButton:hover {
+            background-color: rgba(255, 255, 255, 0.3)
+        }
+
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #ffffff;
+            display: block;
+            margin: 10px 0px;
+        }
+
+        p {
+            color: #ffffff;
+            font-size: 12px;
+        }
+
+
+        .map-overlay label {
+            font-size: 12px;
+            color: #ffffff;
+            horiz-align: center;
+            padding: 10px 10px 20px 10px;
+        }
+
+        .collapsible {
+            background-color: Transparent;
+            width: 100%;
+            color: white;
+            font-size: 14px;
+            border: none;
+            padding: 5px;
+            text-align: left;
+            display: block;
+            cursor: pointer;
+        }
+
+        .active .collapsible:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .content {
+            padding: 0 10px;
+            display: none;
+            overflow: hidden;
+            background-color: rgba(89, 89, 89, 0.5);
+        }
+
+        #legend {
+            font-size: 12px;
+            width: 100%;
+            height: 40px;
+            padding: 5px 10px;
+        }
+
+        .row {
+            position: center;
+            height: 12px;
+            width: 90%;
+            padding-left: 5px;
+        }
+
+        .colors {
+            background: linear-gradient(to right, #32e458, #eab71f, #e55720, #bf1c1c, #800d2d, #441038);
+            margin-bottom: 5px;
+        }
+
+        .legendLabel {
+            width: 15%;
+            color: #FFFFFF;
+            display: inline-block;
+            text-align: left;
+        }
+
+        .mapboxgl-popup-content {
+            position: relative;
+            background: #fff;
+            border-radius: 3px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            padding: 10px 10px 15px;
+            pointer-events: auto;
+            width: 180px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+
+<body>
+    <style>
+        body {
+            overflow: hidden;
+        }
+
+        body * {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css"
+        type="text/css">
+    <div id="comparison-container">
+        <div id="before" class="map"></div>
+        <div id="after" class="map"></div>
+    </div>
+    <div class='map-overlay top'>
+        <div class='map-overlay-inner'>
+            <h3>Housing and Homeless Comparison in London</h3>
+            <table>
+                <tr>
+                    <td>
+                        <input type="radio" class="radiobutton" name="year" id="2004"><label>2004</label>
+                        <input type="radio" class="radiobutton" name="year" id="2009"><label>2009</label>
+                        <input type="radio" class="radiobutton" name="year" id="2014"><label>2014</label>
+                        <input type="radio" class="radiobutton" name="year" id="2019" checked><label>2019</label>
+                    </td>
+                </tr>
+                <h5>Total Stock and Vacant </h5>
+                <div class="bottonlist">
+                    <button class="collapsible" id="Stock" checked>Dwelling Stock</button>
+                    <button class="collapsible" id="Vacant">Dwelling Vacant</button>
+                </div>
+
+
+
+
+                <script src="HHL.js"></script>
+
+</body>
+
+</html>
