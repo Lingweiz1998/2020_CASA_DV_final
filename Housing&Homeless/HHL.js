@@ -2,7 +2,7 @@ mapboxgl.accessToken =
     'pk.eyJ1IjoibGluZ3dlaXoiLCJhIjoiY2trNWFsNzRvMG9pajJ3cW5udHpjaGlldyJ9._WoXMc4ffb6xIBNNl764Kw';
 var beforeMap = new mapboxgl.Map({
     container: 'before',
-    style: 'mapbox://styles/mapbox/light-v10',
+    style: 'mapbox://styles/lingweiz/ckm614gx12zvz17nwit56cbne',
     center: [-0.125, 51.515],
     zoom: 10
 });
@@ -22,135 +22,310 @@ var map = new mapboxgl.Compare(beforeMap, afterMap, container, {
     // mousemove: true
 });
 
-// Set default parameters of map-loading function
-var layerField = 'ST2004';
+// Create an array of the available data years
+var years = [
+    '2004',
+    '2009',
+    '2014',
+    '2019'
+];
 
-beforeMap.on('load', function () {
-    // Set global light properties which influence 3D layer shadows
-    beforeMap.setLight({
-        color: "#fff",
-        intensity: 0.15,
-        position: [1.15, 210, 30]
-    });
-    // Add standard navigation control
-    beforeMap.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
 
-    // Load the 3D employment hexagon layer as a fill type
-    beforeMap.addLayer({
-        id: 'buildings',
-        type: 'fill',
-        source: {
-            type: 'vector',
-            url: 'mapbox://lingweiz.a18nxry8' // Your Mapbox tileset Map ID
-        },
-        'source-layer': 'final-2g64jr', // name of tileset
-        paint: {
-            'fill-color': '#919191',
-            'fill-opacity': 1,
+beforeMap.on('load',
+    function () { // This is our first example of asynchronous JS. We can only add additional layers after the map has loaded
+
+        // This is the main function that runs when the user changes the data year
+        function setYear(year) {
+
+            document.getElementById('year').textContent = years[year]; // Set the label to the correct year
+
+            var pp = beforeMap.getPaintProperty('stock', 'circle-radius');
+
+            console.log(pp);
+            pp.property = "ST" + years[year]; // update the pp circle-radius to the new column set by the user
+
+            beforeMap.setPaintProperty('stock', 'circle-radius', pp);
+
+            console.log(beforeMap.getPaintProperty('stock', 'circle-radius'));
+
+            var yearcol = "ST" + String(years[year]);
+            /*var textfield = "{" + yearcol + "}";*/
+
+            console.log(textfield);
+
+            beforeMap.setLayoutProperty('labels', 'text-field',
+                textfield); // update the labels layer to the new column
+            var filters = ['>', yearcol, 30];
+            beforeMap.setFilter('labels', filters);
         }
-    });
-    beforeMap.addLayer({
-        id: 'airQuality',
-        type: 'fill',
-        source: {
-            type: 'vector',
-            url: 'mapbox://lingweiz.a18nxry8' //  Mapbox tileset Map ID
-        },
-        'source-layer': 'final-2g64jr', // name of tileset
-        paint: {
-            'fill-color': {
-                property: layerField,
-                type: 'exponential',
-                stops: [
-                    [0, '#32e458'],
-                    [10, '#32e458'],
-                    [30, '#eab71f'],
-                    [40, '#e55720'],
-                    [80, '#bf1c1c'],
-                    [100, '#800d2d'],
-                    [800, '#441038']
-                ]
+
+        function setYear1(year) {
+
+            document.getElementById('year').textContent = years[year]; // Set the label to the correct year
+
+            var pp = beforeMap.getPaintProperty('vacant', 'circle-radius');
+
+            console.log(pp);
+            pp.property = "VC" + years[year]; // update the pp circle-radius to the new column set by the user
+
+            beforeMap.setPaintProperty('vacant', 'circle-radius', pp);
+
+            console.log(beforeMap.getPaintProperty('vacant', 'circle-radius'));
+
+            var yearcol = "VC" + String(years[year]);
+            /*var textfield = "{" + yearcol + "}";*/
+
+            console.log(textfield);
+
+            beforeMap.setLayoutProperty('labels', 'text-field',
+                textfield); // update the labels layer to the new column
+            var filters = ['>', yearcol, 30];
+            beforeMap.setFilter('labels', filters);
+        }
+
+        function setYear2(year) {
+
+            document.getElementById('year').textContent = years[year]; // Set the label to the correct year
+
+            var pp = afterMap.getPaintProperty('homeless', 'circle-radius');
+
+            console.log(pp);
+            pp.property = "HL" + years[year]; // update the pp circle-radius to the new column set by the user
+
+            afterMap.setPaintProperty('homeless', 'circle-radius', pp);
+
+            console.log(afterMap.getPaintProperty('homeless', 'circle-radius'));
+
+            var yearcol = "HL" + String(years[year]);
+            /*var textfield = "HL" + String(years[year]);*/
+
+            console.log(textfield);
+
+            afterMap.setLayoutProperty('labels', 'text-field',
+                textfield); // update the labels layer to the new column
+            var filters = ['>', yearcol, 30];
+            afterMap.setFilter('labels', filters);
+        }
+
+        // Add the circle layer to the map
+
+        beforeMap.addLayer({
+            id: 'stock',
+            type: 'circle',
+            source: {
+                type: 'vector',
+                url: 'mapbox://lingweiz.5w0x3q89' // Your Mapbox tileset Map ID
             },
-            'fill-opacity': 0.8,
-        }
-    });
+            'source-layer': 'centroid-5m5k66', // name of tileset layer
+            'layout': {
+                'visibility': 'visible'
+            },
+            paint: {
+                'circle-color': '#ff8585',
+                'circle-opacity': 0.90,
+                'circle-stroke-width': {
+                    stops: [
+                        [8, 0.5],
+                        [13, 3],
+                        [16, 4]
+                    ] // The width properties change at different zoom levels, getting thicker
+                },
+                'circle-stroke-color': '#000000',
+                'circle-stroke-opacity': 0,
+                'circle-radius': {
+                    property: 'ST2004',
+                    stops: [ // The circle radius varies according to the zoom level and the number of passengers
+                        [{
+                            zoom: 5,
+                            value: 5000
+                        }, 0.5],
+                        [{
+                            zoom: 5,
+                            value: 165000
+                        }, 4],
+                        [{
+                            zoom: 7,
+                            value: 5000
+                        }, 1],
+                        [{
+                            zoom: 7,
+                            value: 165000
+                        }, 13],
+                        [{
+                            zoom: 9,
+                            value: 5000
+                        }, 2],
+                        [{ 
+                            zoom: 9,
+                            value: 165000
+                        }, 50],
+                        [{
+                            zoom: 12,
+                            value: 5000
+                        }, 5],
+                        [{
+                            zoom: 12,
+                            value: 165000
+                        }, 100]
 
-    var layerList = document.getElementsByClassName("collapsible");
-    var yearList = document.getElementsByClassName("radiobutton");
-
-    var buttonID = 'ST';
-
-    for (let i = 0; i < layerList.length; i++) {
-        var radioID;
-        if (document.getElementById('2004').checked) {
-            radioID = '2004';
-        } else if (document.getElementById('2009').checked) {
-            radioID = '2009';
-        } else if (document.getElementById('2014').checked) {
-            radioID = '2014';
-        } else {
-            radioID = '2019';
-        }
-
-        layerList[i].addEventListener('click', function (e) {
-            buttonID = e.target.id;
-
-            //define layer id by name
-            layerField = buttonID + radioID.substring(2);
-            layerField = layerField.replace(/\s/g, '');
-
-            var paintDesign = {
-                property: layerField,
-                type: 'exponential',
-                stops: [
-                    [0, '#32e458'],
-                    [10, '#32e458'],
-                    [30, '#eab71f'],
-                    [40, '#e55720'],
-                    [80, '#bf1c1c'],
-                    [100, '#800d2d'],
-                    [800, '#441038']
-                ]
-            };
-
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.display === "block") {
-                content.style.display = "none";
-            } else {
-                for (let z = 0; z < layerList.length; z++) {
-                    let hidecontent = layerList[z].nextElementSibling;
-                    hidecontent.style.display = "none";
+                    ]
                 }
-                content.style.display = "block";
             }
+        });
 
-            map.setPaintProperty('airQuality', 'fill-color', paintDesign);
-        })
-    }
 
-    for (let i = 0; i < yearList.length; i++) {
+        beforeMap.addLayer({
+            id: 'vacant',
+            type: 'circle',
+            source: {
+                type: 'vector',
+                url: 'mapbox://lingweiz.5w0x3q89' // Your Mapbox tileset Map ID
+            },
+            'source-layer': 'centroid-5m5k66', // name of tileset layer
+            'layout': {
+                'visibility': 'visible'
+            },
+            paint: {
+                'circle-color': '#ff8585',
+                'circle-opacity': 0,
+                'circle-stroke-width': {
+                    stops: [
+                        [8, 0.5],
+                        [13, 3],
+                        [16, 4]
+                    ] // The width properties change at different zoom levels, getting thicker
+                },
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-opacity': 0,
+                'circle-radius': {
+                    property: 'VC2004',
+                    stops: [ // The circle radius varies according to the zoom level and the number of passengers
+                        [{
+                            zoom: 5,
+                            value: 0
+                        }, 0.5],
+                        [{
+                            zoom: 5,
+                            value: 6400
+                        }, 4],
+                        [{
+                            zoom: 7,
+                            value: 0
+                        }, 1],
+                        [{
+                            zoom: 7,
+                            value: 6400
+                        }, 13],
+                        [{
+                            zoom: 9,
+                            value: 0
+                        }, 2],
+                        [{
+                            zoom: 9,
+                            value: 6400
+                        }, 50],
+                        [{
+                            zoom: 12,
+                            value: 0
+                        }, 5],
+                        [{
+                            zoom: 12,
+                            value: 6400
+                        }, 100]                ]
+                }
+            }
+        });
 
-        yearList[i].addEventListener('click', function (e) {
-            let radioID = e.target.id;
+        afterMap.addLayer({
+            id: 'homeless',
+            type: 'circle',
+            source: {
+                type: 'vector',
+                url: 'mapbox://lingweiz.5w0x3q89' // Your Mapbox tileset Map ID
+            },
+            'source-layer': 'centroid-5m5k66', // name of tileset layer
+            'layout': {
+                'visibility': 'visible'
+            },
+            paint: {
+                'circle-color': '#ff8585',
+                'circle-opacity': 0.90,
+                'circle-stroke-width': {
+                    stops: [
+                        [8, 0.5],
+                        [13, 3],
+                        [16, 4]
+                    ] // The width properties change at different zoom levels, getting thicker
+                },
+                'circle-stroke-color': '#ffffff',
+                'circle-stroke-opacity': 0,
+                'circle-radius': {
+                    property: 'HL2004',
+                    stops: [ // The circle radius varies according to the zoom level and the number of passengers
+                        [{
+                            zoom: 5,
+                            value: 0
+                        }, 0.5],
+                        [{
+                            zoom: 5,
+                            value: 1700
+                        }, 4],
+                        [{
+                            zoom: 7,
+                            value: 0
+                        }, 1],
+                        [{
+                            zoom: 7,
+                            value: 1700
+                        }, 13],
+                        [{
+                            zoom: 9,
+                            value: 0
+                        }, 2],
+                        [{
+                            zoom: 9,
+                            value: 1700
+                        }, 50],
+                        [{
+                            zoom: 12,
+                            value: 0
+                        }, 5],
+                        [{
+                            zoom: 12,
+                            value: 1700
+                        }, 100]
+                    ]
+                }
+            }
+        });
 
-            layerField = buttonID + radioID.substring(2);
-            layerField = layerField.replace(/\s/g, '');
-            var paintDesign = {
-                property: layerField,
-                type: 'exponential',
-                stops: [
-                    [0, '#32e458'],
-                    [10, '#32e458'],
-                    [30, '#eab71f'],
-                    [40, '#e55720'],
-                    [80, '#bf1c1c'],
-                    [100, '#800d2d'],
-                    [800, '#441038']
-                ]
-            };
 
-            map.setPaintProperty('airQuality', 'fill-color', paintDesign);
-        })
-    }
-});
+
+
+        // Assign an event listner to the slider so that the setYear function runs when the user changes the slider
+        document.getElementById('slider').addEventListener('input', function (e) {
+            var year = parseInt(e.target.value);
+            setYear(year);
+        });
+        document.getElementById('slider').addEventListener('input', function (e) {
+            var year = parseInt(e.target.value);
+            setYear1(year);
+        });
+        document.getElementById('slider').addEventListener('input', function (e) {
+            var year = parseInt(e.target.value);
+            setYear2(year);
+        });
+
+        //Event listener for layer switch
+        document.getElementById("layer1").addEventListener("click", function () {
+            beforeMap.setPaintProperty('stock', 'circle-opacity', 0.95);
+            beforeMap.setPaintProperty('vacant', 'circle-opacity', 0);
+        });
+
+        document.getElementById("layer2").addEventListener("click", function () {
+            beforeMap.setPaintProperty('stock', 'circle-opacity', 0);
+            beforeMap.setPaintProperty('vacant', 'circle-opacity', 0.95);
+        });
+
+
+    });
