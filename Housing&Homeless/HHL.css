@@ -18,18 +18,18 @@ body * {
 .panel {
     position: absolute;
     right: 0;
-    width: 400px;
+    width: 20%;
     height: 100%;
     top: 0;
-    background: rgb(255, 255, 255);
+    background: rgb(14, 10, 49);
     z-index: 2;
-    padding: 20px;
+    padding: 10px;
     opacity: 0.7;
     overflow: hidden;
 }
 
 .panel #container {
-    width: 420px;
+    width: 410px;
     height: 45%;
     bottom:0
 }
@@ -42,7 +42,7 @@ body * {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 100%;
+    width: 79%;
 }
 
 
@@ -50,7 +50,7 @@ body * {
     position: absolute;
     top: 0;
     bottom: 0;
-    width: 100%;
+    width: 79%;
 }
 
 .map-overlay {
@@ -83,7 +83,7 @@ h3,
 h4,
 h5,
 h6 {
-    color: #000000;
+    color: #ffffff;
     display: block;
     margin: 10px 0px;
 }
@@ -128,7 +128,7 @@ h6 {
 .mapboxgl-popup {
     transform: none !important;
     top: 0%;
-    left: 18%;
+    left: 20%;
 }
 
 .mapboxgl-popup-anchor-top .mapboxgl-popup-tip,

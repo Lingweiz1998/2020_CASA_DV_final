@@ -399,10 +399,8 @@ beforeMap.on('load',
         });
 
 
-
-
         var dom = document.getElementById("container");
-        var myChart = echarts.init(dom);
+        var myChart = echarts.init(dom,'dark');
         var app = {};
         var option;
 
@@ -434,7 +432,7 @@ beforeMap.on('load',
                     gridIndex: 0
                 },
                 grid: {
-                    top: '50%'
+                    top: '50%',
                 },
                 series: [{
                         type: 'line',
@@ -533,7 +531,7 @@ beforeMap.on('load',
 
 
         var chartDom = document.getElementById('container1');
-        var myChart1 = echarts.init(chartDom);
+        var myChart1 = echarts.init(chartDom,'dark');
         var option1;
 
         var data = [
