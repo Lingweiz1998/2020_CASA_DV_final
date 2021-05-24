@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset=utf-8 />
+    <title>HousingHomelessmaps</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+    <link href='HHL.css' rel='stylesheet' />
+</head>
+
+
+<body>
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.js"></script>
+    <link rel="stylesheet"
+        href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-compare/v0.4.0/mapbox-gl-compare.css"
+        type="text/css">
+    <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/echarts-nightly@5.1.2-dev.20210512/dist/echarts.min.js"></script>
+
+    <div id="map"></div>
+
+
+
+    <div id="hl-legend" class="legend">
+        <h4>Homeless People <br> (Per thounsand Households)</h4>
+        <div><span style="background-color: #800026"></span>16</div>
+        <div><span style="background-color: #bd0026"></span>14</div>
+        <div><span style="background-color: #e31a1c"></span>12</div>
+        <div><span style="background-color: #fc4e2a"></span>10</div>
+        <div><span style="background-color: #fd8d3c"></span>8</div>
+        <div><span style="background-color: #feb24c"></span>6</div>
+        <div><span style="background-color: #fed976"></span>4</div>
+        <div><span style="background-color: #ffeda0"></span>2</div>
+        <div><span style="background-color: #ffffcc"></span>0</div>
+    </div>
+
+    <div id="hp-legend" class="legend" style="display: none">
+        <h4>House Price Index</h4>
+        <div><span style="background-color: #b10026"></span>140</div>
+        <div><span style="background-color: #e31a1c"></span>125</div>
+        <div><span style="background-color: #fc4e2a"></span>110</div>
+        <div><span style="background-color: #fd8d3c"></span>95</div>
+        <div><span style="background-color: #feb24c"></span>80</div>
+        <div><span style="background-color: #fed976"></span>65</div>
+        <div><span style="background-color: #ffeda0"></span>50</div>
+        <div><span style="background-color: #ffffcc"></span>35</div>
+    </div>
+
+    <div class='map-overlay top'>
+        <div class='map-overlay-inner'>
+            <h2>Homeless and House Price in London</h2>
+            <h4>From 2004 to 2020</h4>
+            <p style="color:white">Data source:
+                <br>
+                <a href="https://www.gov.uk/government/collections/homelessness-statistics#statutory-homelessness ">
+                    UK Live tables on homelessness </a>
+                <br>
+                <a href="https://data.london.gov.uk/dataset/uk-house-price-index">
+                    UK House Price Index</a>
+                <br>
+                <h4 id="laname"> Hover over a local authority </h2>
+                    <table>
+                        <tr>
+                            <td>
+                                <div id="mydiv">
+                                    <input id='slider' type='range' min='0' max='8' step='1' value='0'
+                                        list='tickmarks' />
+                                    <datalist id="tickmarks">
+                                        <option value="0" label="2004">
+                                        <option value="1" label="2006">
+                                        <option value="2" label="2008">
+                                        <option value="3" label="2010">
+                                        <option value="4" label="2012">
+                                        <option value="5" label="2014">
+                                        <option value="6" label="2016">
+                                        <option value="7" label="2018">
+                                        <option value="8" label="2020">
+                                    </datalist>
+                                </div>
+                                <h5><label id='year'>2004</label> Year</h5>
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <tr>
+                        <td>
+                            <h5>Switch between Homeless and House Price </h5>
+                            <div class="bottonlist">
+                                <button class="collapsible" id="layer1" checked>Homeless People <br> (Per thounsand of
+                                    Households)</button>
+                                <br>
+                                <button class="collapsible" id="layer2">House Price Index</button>
+            </p>
+        </div>
+        </tr>
+        </td>
+    </div>
+    </div>
+    <div class="panel1">
+        <div id="container1"></div>
+    </div>
+
+    <script src="HHL.js"></script>
+
+</body>
+
+</html>
