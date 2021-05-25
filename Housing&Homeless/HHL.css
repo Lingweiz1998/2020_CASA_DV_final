@@ -50,6 +50,19 @@ body * {
     width: 100%;
 }
 
+.hoverbar{
+    position: absolute;
+    left: 410px;
+    top: 0px;
+    width: 250px;
+    height: 150px;
+    background: rgb(14, 10, 49);
+    z-index: 2;
+    padding: 20px;
+    opacity: 0.7;
+    overflow: hidden;
+}
+
 .map-overlay {
     font: 20px inherit;
     background-color: rgb(14, 10, 49);

@@ -186,7 +186,8 @@ map.on('load',
                 ]); // Filter the highlight layer to show the local authority outline
                 console.log(la[0].properties.Borough);
                 document.getElementById('laname').innerHTML = la[0].properties
-                    .Borough; // Change the name in the top left box to show the local authority name
+                    .Borough +":<br><br> Homeless (Per Thousand): <br>"+ "From " + la[0].properties.HL2004 + " to " + la[0].properties.HL2020
+                    + "<br><br> House Price Index: <br>"+ "From " + la[0].properties.HP2004 + " to " + la[0].properties.HP2020; // Change the name in the top left box to show the local authority name
                 console.log(la[0].id);
                 console.log(la);
 
